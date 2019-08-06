@@ -1,10 +1,11 @@
 #!usr/bin/env python
 import os
 from flask import request
-from app import create_app, db
+from app import create_app
 # from app.models import
 
-app = create_app(os.environ.get('CONFIG') or 'development')
+app = create_app('development')
+
 
 @app.url_defaults
 def hashed_static_file(endpoint, values):
@@ -23,9 +24,4 @@ def hashed_static_file(endpoint, values):
 
 
 if __name__ == '__main__':
-
-    # with app.app_context():
-    #     db.drop_all()
-    #     db.create_all()
-
-    app.run(port=5000)
+    app.run(port=5001)

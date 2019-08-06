@@ -1,10 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Twitter Sentiment Analysis</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-
+  <div id="page">
+    <div class="container-fluid">
+      <div class="col-offset-1 col-12">
+        <div class="jumbotron">
+          <h1>Twitter Sentiment Analysis</h1>
+          <h3>
+            Enter a term and my neural network will tell you whether people are tweeting positively or negatively
+          </h3>
+        </div>
+      </div>
+      <div class="col-12">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+          {% if category == 'success' %}
+            <div class="alert alert-success">
+          {% else %}
+            <div class="alert alert-danger">
+          {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            Enter a Term
+          </h5>
+          <div class="card-text">
+            <form method="POST" class="needs-validation" action="{{ url_for('main.index') }}">
+              <div class="form-group">
+                {{form.term(class='form-control', placeholder='Term (required)', required=True)}}
+              </div>
+              {{form.csrf_token}}
+              <button id='submit' type="submit" class="btn btn-primary">Send</button>
+            </form>
+            {% if responses['average'] %}
+              <br/>
+              <div class="alert alert-info">
+                {% if responses['average'] >  0.6 %}
+                  Twitter's Sentiment is generally POSITIVE.
+                {% elif responses['average'] > 0.4 %}
+                  Twitter's Sentiment about is generally NEUTRAL.
+                {% else %}
+                  Twitter's Sentiment about is generally NEGATIVE.
+                {% endif %}
+              </div>
+            {% endif %}
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Tweet</th>
+                  <th scope="col">Positivity Probability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for response in responses['results'] %}
+                  <tr>
+                    <td>{{ response['tweet'] }}</td>
+                    {% if response['score'] > 0.8 %}
+                      <td class="alert-success">{{ (response['score']*100)|round(0) }}%</td>
+                    {% elif response['score'] < 0.3 %}
+                      <td class="alert-danger">{{ (response['score']*100)|round(0) }}%</td>
+                    {% else %}
+                      <td >{{ (response['score']*100)|round(0) }}%</td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{ moment.include_jquery() }}
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
