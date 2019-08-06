@@ -1,4 +1,7 @@
 .idea/
+key
+app/model/model.h5
+app/model/pipe.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
