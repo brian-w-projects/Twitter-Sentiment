@@ -2,7 +2,6 @@
 import os
 from flask import request
 from app import create_app
-# from app.models import
 
 app = create_app('development')
 
@@ -24,4 +23,4 @@ def hashed_static_file(endpoint, values):
 
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=5000)

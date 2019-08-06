@@ -1,7 +1,6 @@
-from flask import render_template, request, jsonify, session, flash, redirect, url_for, current_app
+from flask import render_template, request, jsonify, flash
 from . import main
 from .forms import TermForm
-# from ..models import
 import os
 import dill
 from keras.models import load_model
